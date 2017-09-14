@@ -33,10 +33,14 @@ cd mt_workers
 python manage.py migrate
 ```
 ```
-python manage.py runserver
+python manage.py runserver 8001
 ```
 
 second terminal
 ```
 celery -A mt_workers worker -l info
+```
+third terminal
+```
+flower -A mt_workers --port=5555
 ```

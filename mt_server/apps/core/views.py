@@ -10,7 +10,7 @@ from .tasks import create_random_user_accounts
 class GenerateRandomUserView(View):
 
     def get(self, request, *args, **kwargs):
-        create_random_user_accounts.delay(1)
+        create_random_user_accounts.delay(10)
         return HttpResponse(json.dumps(
                                 {
                                     'response': 'We are generating your random users!'
