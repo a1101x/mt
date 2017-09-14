@@ -1,0 +1,27 @@
+import sys
+
+from mt_server.settings.base import *
+
+
+DATABASES = {}
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'test_mt'
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'mt',
+            'USER': 'admin',
+            'PASSWORD': 'p@ssword',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+
+CELERY_BROKER_URL = 'amqp://localhost'

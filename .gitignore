@@ -1,0 +1,13 @@
+.DS_Store
+.vscode/
+.idea/
+*.pyc
+*.pyo
+*.mo
+__pycache__/
+server_venv/
+workers_venv/
+db.sqlite3
+
+# local Django settings:
+local.py
