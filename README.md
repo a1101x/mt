@@ -38,7 +38,13 @@ python manage.py runserver 8001
 
 second terminal
 ```
-celery -A mt_workers worker -l info
+celery -A mt_workers worker --concurrency=10 -l info
+
+OR (diff terminals)
+
+celery -A mt_workers worker --loglevel=INFO --concurrency=10 -n worker1@%h
+celery -A mt_workers worker --loglevel=INFO --concurrency=10 -n worker2@%h
+celery -A mt_workers worker --loglevel=INFO --concurrency=10 -n worker3@%h
 ```
 third terminal
 ```
