@@ -35,3 +35,8 @@ python manage.py migrate
 ```
 python manage.py runserver
 ```
+
+second terminal
+```
+celery -A mt_workers worker -l info
+```
