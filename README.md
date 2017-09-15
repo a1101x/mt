@@ -1,3 +1,8 @@
+# FOR DEVELOPMENT
+```
+change runall.sh and run it: ./runall.sh
+```
+
 # mt_server
 
 Python 3
