@@ -21,4 +21,3 @@ def create_random_user_accounts(total):
     except User.DoesNotExist:
         print("maybe do some clenup here....")
         create_random_user_accounts.retry()
-        

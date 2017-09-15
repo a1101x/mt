@@ -7,6 +7,7 @@
 __pycache__/
 server_venv/
 workers_venv/
+sockets_venv/
 db.sqlite3
 
 # local Django settings:

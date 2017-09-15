@@ -35,9 +35,6 @@ pip install -r mt_workers/requirements.txt
 cd mt_workers
 ```
 ```
-python manage.py migrate
-```
-```
 python manage.py runserver 8001
 ```
 
@@ -54,4 +51,25 @@ celery -A mt_workers worker --loglevel=INFO --concurrency=10 -n worker3@%h
 third terminal
 ```
 flower -A mt_workers --port=5555
+```
+
+# mt_sockets
+
+Python 3
+```
+virtualenv sockets_venv -p python3
+```
+```
+pip install -r mt_sockets/requirements.txt
+```
+```
+cd mt_sockets
+```
+```
+daphne apps.core.asgi:channel_layer --port 8002
+```
+
+second terminal
+```
+python manage.py runworker
 ```

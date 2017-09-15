@@ -1,0 +1,35 @@
+import sys
+
+from mt_sockets.settings.base import *
+
+
+DATABASES = {}
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'test_mt'
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'mt',
+            'USER': 'admin',
+            'PASSWORD': 'p@ssword',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_rabbitmq.RabbitmqChannelLayer',
+        'ROUTING': 'mt_sockets.routing.channel_routing',
+        'CONFIG': {
+            'url': 'amqp://localhost',
+        },
+    },
+}
