@@ -1,6 +1,7 @@
 import string
 
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.utils.crypto import get_random_string
 
 from celery import shared_task, task
@@ -15,6 +16,9 @@ def create_random_user_accounts(total):
             email = '{}@example.com'.format(username)
             password = get_random_string(50)
             User.objects.create_user(username=username, email=email, password=password)
+
+            user = User.objects.get(username=username, email=email)
+            cache.set(user.id, user)
 
             User.objects.get(username=username, email=email).delete()
         return '{} random users created with success!'.format(total)
