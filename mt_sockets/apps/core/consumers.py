@@ -1,12 +1,44 @@
-from django.core.cache import cache
-from django.http import HttpResponse
+import json
 
-from channels.handler import AsgiHandler
+from channels import Group
+from channels.sessions import channel_session
 
 
-def http_request_consumer(message):
-    response = HttpResponse('Hello world! You asked for %s' % message.content['path'])
-    for chunk in AsgiHandler.encode_response(response):
-        message.reply_channel.send(chunk)
-        print(cache.keys('*'))
+@channel_session
+def ws_connect(message):
+    try:
+        message.reply_channel.send({'accept': True})
+        label = message['path'].split('/')[2]
+        Group('chat-' + label, channel_layer=message.channel_layer).add(message.reply_channel)
+        message.channel_session['room'] = label
+        print(message['path'].split('/')[2])
+    except (KeyError,):
+        pass
 
+
+@channel_session
+def ws_receive(message):
+    try:
+        label = message.channel_session['room']
+        data = json.loads(message['text'])
+    except ValueError:
+        return
+
+    if data:
+        try:
+            Group('chat-' + label, channel_layer=message.channel_layer).send({'text': json.dumps(
+                {
+                    'text': json.loads(message['text']),
+                })
+            })
+        except (KeyError, ValueError):
+            return
+
+
+@channel_session
+def ws_disconnect(message):
+    try:
+        label = message.channel_session['room']
+        Group('chat-' + label, channel_layer=message.channel_layer).discard(message.reply_channel)
+    except (KeyError,):
+        return

@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
-from apps.core.views import GenerateRandomUserView
+from apps.core.views import TestView
 
 urlpatterns = [
-    url(r'^users/$', GenerateRandomUserView.as_view(), name='randomusers'),        
+    url(r'^test/$', TestView.as_view(), name='test'),        
 ]
