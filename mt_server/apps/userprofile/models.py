@@ -44,3 +44,12 @@ class RegistrationActivationEmail(models.Model):
 
     def __str__(self):
         return '{}'.format(self.user.email)
+
+
+class RegistrationActivationSMS(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    pin_code = models.CharField(max_length=40)
+
+    def __str__(self):
+        return '{} - {}'.format(self.user, self.pin_code)
+    

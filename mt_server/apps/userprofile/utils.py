@@ -1,5 +1,5 @@
 import hashlib
-import random
+from random import randrange, shuffle, choice
 import string
 
 from django.conf import settings
@@ -13,11 +13,17 @@ from django.utils.http import urlsafe_base64_encode
 from twilio.rest import Client
 from refreshtoken.models import RefreshToken
 
-from apps.userprofile.models import RegistrationActivationEmail
+from apps.userprofile.models import RegistrationActivationEmail, RegistrationActivationSMS
+
+
+def generate_pin_code():
+    secret = list(randrange(0,9) for _ in range(4))
+    shuffle(secret)
+    return "".join(map(str, secret))
 
 
 def generate_code():
-    secret = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(9))
+    secret = ''.join(choice(string.ascii_uppercase + string.digits) for _ in range(9))
     return secret
 
 
@@ -59,14 +65,15 @@ def jwt_response_payload_handler(token, user=None, request=None):
     return payload
 
 
-def send_sms(phone):
-    activation_key = generate_code()
+def send_sms(user, phone):
+    pin_code = generate_pin_code()
+    RegistrationActivationSMS.objects.create(user=user, pin_code=pin_code)
     context = {
-        'code': activation_key,
+        'code': pin_code,
     }
 
     message = render_to_string('send_sms/send_email_activation_sms.txt', context=context)
     message = message.encode('utf-8')
     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-    response = client.messages.create(body=message, to=phone, from_='+18582602487')
+    response = client.messages.create(body=message, to=phone, from_=settings.TWILIO_NUMBER)
     return response

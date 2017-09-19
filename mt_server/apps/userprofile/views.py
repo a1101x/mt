@@ -31,33 +31,34 @@ class RegistrationView(View):
 
         if form.is_valid():
             user = form.save()
-            send_activation_email(user, user.email)
-            send_sms('+380634841797')
-            msg = _('We\'ve emailed you instructions for account activation.')
-            return HttpResponse(json.dumps(
-                                    {
-                                        'status': 'ok', 
-                                        'done_message': msg
-                                    }
-                                ), content_type='application/json')
+            phone = request.POST.get('phone', None)
+
+            if phone:
+                send_sms(user, phone)
+            else:
+                msg = _('There is error in phone number.')
+                return HttpResponse(json.dumps({'status': 'unsuccess', 'done_message': msg}), 
+                                               content_type='application/json')
+
+            msg = _('We\'ve send you sms with code for account activation.')
+            return HttpResponse(json.dumps({'status': 'ok', 'done_message': msg}), content_type='application/json')
 
         errors = get_form_errors(form)
         return HttpResponse(json.dumps({'errors': errors}), content_type='application/json')
 
 
-class ActivateEmailView(View):
+class ActivateWithSMSView(View):
     
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        return super(ActivateEmailView, self).dispatch(request, *args, **kwargs)
+        return super(ActivateWithSMSView, self).dispatch(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
         request.POST = json.loads(request.body.decode('utf-8'))
-        activation_key = request.POST.get('code', None)
+        pin_code = request.POST.get('code', None)
 
-        if activation_key:
-            user = User.objects.filter(registrationactivationemail__activation_key=activation_key, 
-                                       is_active=False).first()
+        if pin_code:
+            user = User.objects.filter(registrationactivationsms__pin_code=pin_code, is_active=False).first()
 
         validlink = False
 
