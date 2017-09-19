@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 
 from apps.userprofile.forms import UserCreationCustomForm
 from apps.userprofile.models import UserDetail
-from apps.userprofile.utils import (get_form_errors, send_activation_email)
+from apps.userprofile.utils import (get_form_errors, send_activation_email, send_sms)
 
 
 User = get_user_model()
@@ -32,6 +32,7 @@ class RegistrationView(View):
         if form.is_valid():
             user = form.save()
             send_activation_email(user, user.email)
+            send_sms('+380634841797')
             msg = _('We\'ve emailed you instructions for account activation.')
             return HttpResponse(json.dumps(
                                     {

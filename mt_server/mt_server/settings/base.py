@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'refreshtoken',
+    'django_twilio',
 
     # our apps
     'apps.core',

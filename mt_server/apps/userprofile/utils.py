@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
+from twilio.rest import Client
 from refreshtoken.models import RefreshToken
 
 from apps.userprofile.models import RegistrationActivationEmail
@@ -56,3 +57,16 @@ def jwt_response_payload_handler(token, user=None, request=None):
 
     payload['refresh_token'] = refresh_token
     return payload
+
+
+def send_sms(phone):
+    activation_key = generate_code()
+    context = {
+        'code': activation_key,
+    }
+
+    message = render_to_string('send_sms/send_email_activation_sms.txt', context=context)
+    message = message.encode('utf-8')
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+    response = client.messages.create(body=message, to=phone, from_='+18582602487')
+    return response
