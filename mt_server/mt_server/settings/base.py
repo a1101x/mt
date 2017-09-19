@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'apps.userprofile',
 ]
 
+CELERY_IMPORTS = ('apps.core.tasks' , 'apps.userprofile.tasks')
+
 SITE_ID = 1
 
 MIDDLEWARE = [

@@ -11,7 +11,8 @@ from django.utils.translation import ugettext as _
 
 from apps.userprofile.forms import UserCreationCustomForm
 from apps.userprofile.models import UserDetail
-from apps.userprofile.utils import (get_form_errors, send_activation_email, send_sms)
+from apps.userprofile.tasks import send_sms
+from apps.userprofile.utils import get_form_errors
 
 
 User = get_user_model()
@@ -34,7 +35,7 @@ class RegistrationView(View):
             phone = request.POST.get('phone', None)
 
             if phone:
-                send_sms(user, phone)
+                send_sms.delay(user.id, phone)
             else:
                 msg = _('There is error in phone number.')
                 return HttpResponse(json.dumps({'status': 'unsuccess', 'done_message': msg}), 

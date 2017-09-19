@@ -11,7 +11,6 @@ def ws_connect(message):
         label = message['path'].split('/')[2]
         Group('chat-' + label, channel_layer=message.channel_layer).add(message.reply_channel)
         message.channel_session['room'] = label
-        print(message['path'].split('/')[2])
     except (KeyError,):
         pass
 

@@ -57,7 +57,6 @@ class UserCreationCustomForm(UserCreationForm):
         userprofile = UserDetail.objects.get(user=user)
         
         for param in parameters:
-            print(self.cleaned_data.get(param))
             setattr(userprofile, param, self.cleaned_data.get(param))
             
         userprofile.save()
