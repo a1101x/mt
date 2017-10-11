@@ -1,0 +1,51 @@
+import sys
+
+from mt_workers.settings.base import *
+
+
+DATABASES = {}
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'test_mt'
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'mt',
+            'USER': 'admin',
+            'PASSWORD': 'p@ssword',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+
+CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERYD_TASK_SOFT_TIME_LIMIT = 60
+
+SENDGRID_API_KEY='****************'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'sendgrid_user'
+EMAIL_HOST_PASSWORD = '****************'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+TWILIO_ACCOUNT_SID = '****************'
+TWILIO_AUTH_TOKEN = '****************'
+TWILIO_NUMBER = '+****************'
+
+ELASTIC_HOST = 'http://localhost:9200/'
+
+RABBITMQ_HOST = 'http://localhost:15672/api'
+RABBITMQ_USER = 'test'
+RABBITMQ_PASSWORD = 'test'
+
+DELETE_CONSUMERS_MINUTE = '*/5'
+DELETE_CONSUMERS_HOUR = '4,16' # http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html#crontab-schedules

@@ -1,0 +1,44 @@
+import sys
+
+from mt_sockets.settings.base import *
+
+
+DATABASES = {}
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'test_mt'
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'mt',
+            'USER': 'admin',
+            'PASSWORD': 'p@ssword',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+        """
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'cgqxftfc',
+            'USER': 'cgqxftfc',
+            'PASSWORD': 'bACBvEoQvxz97Bnw-Ft2nna6vAXXErYB',
+            'HOST': 'horton.elephantsql.com',
+            'PORT': '5432',
+        """
+    }
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_redis.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('localhost', 6379)],
+            # 'hosts': ['redis:/***********@redis-11615.c1.eu-west-1-3.ec2.cloud.redislabs.com:11615'],
+        },
+        'ROUTING': 'mt_sockets.routing.channel_routing',
+    },
+}

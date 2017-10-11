@@ -1,0 +1,14 @@
+{% load i18n %}
+{% blocktrans %}
+Hi!
+Your registration complete.
+Please login with this code: {{ code }}
+{% endblocktrans %}
+
+{% blocktrans %}
+If you received this letter by mistake, ignore it.
+{% endblocktrans %}
+{% blocktrans %}
+Sincerely yours
+Team MT
+{% endblocktrans %}
